@@ -22,6 +22,8 @@ These screenshots are form the showcase application in the samples directory. Th
 
 ![Advanced Fields](https://github.com/ittybittydude/IBAForms/raw/master/doc/screenshots/DateTimePicklists.jpg)
 
+![More Fields](https://github.com/pulkitsinghal/IBAForms/raw/master/doc/screenshots/CreditCardPickList.jpg)
+
 ### Showcase
 ![Showcase Form](https://github.com/ittybittydude/IBAForms/raw/master/doc/screenshots/showcase.jpg)
 
