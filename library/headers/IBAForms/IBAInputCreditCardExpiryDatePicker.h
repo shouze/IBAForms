@@ -21,7 +21,6 @@
 #define MONTH_COMPONENT (0)
 #define YEAR_COMPONENT  (1)
 #define NB_COMPONENT_CCEDP    (2)
-#define CREATION_DATE   (2011)
 #define IBA_CREDIT_CARD_EXPIRY_DATE_PICKER_YEAR_RANGE (10)
 #define IBAInputDatePickerViewRowUpdated @"IBAInputDatePickerViewRowUpdated"
 

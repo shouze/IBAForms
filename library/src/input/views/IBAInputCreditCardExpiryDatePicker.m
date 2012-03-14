@@ -20,6 +20,8 @@
 #import "IBAInputCreditCardExpiryDatePicker.h"
 #import "IBAInputGenericPickerView.h"
 
+static NSInteger CREATION_DATE;
+
 @implementation IBAInputCreditCardExpiryDatePicker
 
 @synthesize monthCollection, yearCollection, dateComponents, date;
@@ -38,6 +40,7 @@
     
     self.monthCollection =[NSArray arrayWithObjects:@"01",@"02",@"03",@"04",@"05",@"06",@"07",@"08",@"09",@"10",@"11",@"12",nil];
 	self.yearCollection = [self createYearArray:[self.dateComponents year]];
+    CREATION_DATE = [[self.yearCollection objectAtIndex:0] integerValue];
     self.showsSelectionIndicator = YES;
 	self.backgroundColor = [UIColor clearColor];
 
@@ -76,7 +79,7 @@
 {
     NSDateComponents *comps = [[NSDateComponents alloc] init];
     [comps setYear:([self selectedRowInComponent:YEAR_COMPONENT] % [yearCollection count] + CREATION_DATE)];
-    [comps setMonth:([self selectedRowInComponent:MONTH_COMPONENT] % [monthCollection count] + 1)];
+    [comps setMonth:([self selectedRowInComponent:MONTH_COMPONENT] % [monthCollection count]+1)];
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
 
     if(component == YEAR_COMPONENT)
