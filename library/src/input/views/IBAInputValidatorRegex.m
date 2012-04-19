@@ -34,6 +34,7 @@
         returnValue = YES;
         error = messageInvalid;
     }
+    [stringTest release];
     return returnValue;
 }
 
