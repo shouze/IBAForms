@@ -36,7 +36,7 @@
 - (void)inputManagerDidHide:(NSNotification *)notification;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
 	   formDataSource:(IBAFormDataSource *)formDataSource;
-- (void)deleteNavigationToolbar:(BOOL)delete;
+- (void)deleteNavigationToolbar:(BOOL)deleteNavBar;
 
 /* Methods for subclasses to customise behaviour */
 

@@ -67,9 +67,9 @@
     return self;
 }
 
-- (void)deleteNavigationToolbar:(BOOL)delete
+- (void)deleteNavigationToolbar:(BOOL)deleteNavBar
 {
-    if (delete)
+    if (deleteNavBar)
     {
         [[[IBAInputManager sharedIBAInputManager] inputNavigationToolbar] setFrame:CGRectMake(0, 0, 0, 0)];
         [[[IBAInputManager sharedIBAInputManager] inputNavigationToolbar] setHidden:YES];
