@@ -31,7 +31,7 @@
 
 	@private
 	UIView *hiddenCellCache_;
-    IBAInputValidatorGeneric *validator;
+    //IBAInputValidatorGeneric *validator;
 }
 
 @property (readwrite, retain) UIView *inputView;
