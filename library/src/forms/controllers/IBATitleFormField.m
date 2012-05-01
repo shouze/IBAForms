@@ -22,8 +22,14 @@
 	if (cell_ == nil) {
 		cell_ = [[IBALabelFormCell alloc] initWithFormFieldStyle:self.formFieldStyle reuseIdentifier:@"Cell" validator:self.validator];
 	}
-	
+
 	return cell_;
+}
+
+- (void)dealloc {
+    IBA_RELEASE_SAFELY(cell_);
+
+    [super dealloc];
 }
 
 - (void)updateCellContents {

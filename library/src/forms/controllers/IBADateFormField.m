@@ -26,6 +26,7 @@
 - (void)dealloc {
 	IBA_RELEASE_SAFELY(dateFormFieldCell_);
 	IBA_RELEASE_SAFELY(dateFormatter_);
+    IBA_RELEASE_SAFELY(defaultValue_);
 
 	[super dealloc];
 }
@@ -35,7 +36,7 @@
 	if ((self = [super initWithKeyPath:keyPath title:title valueTransformer:nil validator:valueValidator])) {
 		self.dateFormFieldType = dateFieldType;
 		self.defaultValue = date;
-        
+
 		self.dateFormatter = dateFormatter;
 		if (self.dateFormatter == nil) {
 			self.dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
@@ -44,7 +45,7 @@
 			[dateFormatter setDateFormat:@"EEE d MMM yyyy"];
 		}
 	}
-    
+
     return self;
 }
 
