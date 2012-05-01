@@ -1,19 +1,18 @@
 //
 // Copyright 2010 Itty Bitty Apps Pty Ltd
-// 
-// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this 
-// file except in compliance with the License. You may obtain a copy of the License at 
-// 
-// http://www.apache.org/licenses/LICENSE-2.0 
-// 
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+// file except in compliance with the License. You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software distributed under
-// the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
+// the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 // ANY KIND, either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
 
 #import <Foundation/Foundation.h>
-#import "SynthesizeSingleton.h"
 #import "IBAInputManager.h"
 #import "IBACommon.h"
 #import "IBAInputCommon.h"
@@ -39,11 +38,19 @@
 
 @implementation IBAInputManager
 
-SYNTHESIZE_SINGLETON_FOR_CLASS(IBAInputManager);
-
 @synthesize inputRequestorDataSource = inputRequestorDataSource_;
 @synthesize inputNavigationToolbar = inputNavigationToolbar_;
 @synthesize inputNavigationToolbarEnabled = inputNavigationToolbarEnabled_;
+
++ (IBAInputManager *)sharedIBAInputManager {
+    static dispatch_once_t once;
+    static IBAInputManager *shared_input_manager;
+    dispatch_once(&once, ^{
+        shared_input_manager = [[self alloc] init];
+    });
+
+    return shared_input_manager;
+}
 
 #pragma mark -
 #pragma mark Memory management
@@ -53,24 +60,24 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(IBAInputManager);
 	IBA_RELEASE_SAFELY(inputRequestorDataSource_);
 	IBA_RELEASE_SAFELY(activeInputRequestor_);
 	IBA_RELEASE_SAFELY(inputNavigationToolbar_);
-	
+
 	[super dealloc];
 }
 
 - (id)init {
 	if ((self = [super init])) {
 		inputProviders_ = [[NSMutableDictionary alloc] init];
-		
-		inputNavigationToolbar_ = [[IBAInputNavigationToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];   
+
+		inputNavigationToolbar_ = [[IBAInputNavigationToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
 		inputNavigationToolbar_.doneButton.target = self;
 		inputNavigationToolbar_.doneButton.action = @selector(deactivateActiveInputRequestor);
-        [inputNavigationToolbar_.nextPreviousButton addTarget:self action:@selector(nextPreviousButtonSelected) 
+        [inputNavigationToolbar_.nextPreviousButton addTarget:self action:@selector(nextPreviousButtonSelected)
 			forControlEvents:UIControlEventValueChanged];
-        
+
         inputNavigationToolbarEnabled_ = YES;
-		
+
 		// Setup some default input providers
-		
+
 		// Text
 		[self registerInputProvider:[[[IBATextInputProvider alloc] init] autorelease]
 						forDataType:IBAInputDataTypeText];
@@ -78,28 +85,28 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(IBAInputManager);
 		[self registerInputProvider:[[[IBADateInputProvider alloc] init] autorelease]
 						forDataType:IBAInputDataTypeDate];
 		// Time
-		[self registerInputProvider:[[[IBADateInputProvider alloc] initWithDatePickerMode:IBADatePickerModeTime] autorelease] 
+		[self registerInputProvider:[[[IBADateInputProvider alloc] initWithDatePickerMode:IBADatePickerModeTime] autorelease]
 						forDataType:IBAInputDataTypeTime];
-		
+
 		// Date & Time
 		[self registerInputProvider:[[[IBADateInputProvider alloc] initWithDatePickerMode:IBADatePickerModeDateAndTime] autorelease]
 						forDataType:IBAInputDataTypeDateTime];
-        
+
         // Month & Year
 		[self registerInputProvider:[[[IBADateInputProvider alloc] initWithDatePickerMode:IBADatePickerModeMonthAndYear] autorelease]
 						forDataType:IBAInputDataTypeMonthYear];
-		
+
 		// Single Picklist
 		[self registerInputProvider:[[[IBASinglePickListInputProvider alloc] init] autorelease]
 						forDataType:IBAInputDataTypePickListSingle];
 
-        
+
 		// Multiple Picklist
 		[self registerInputProvider:[[[IBAMultiplePickListInputProvider alloc] init] autorelease]
 						forDataType:IBAInputDataTypePickListMultiple];
-    
+
 	}
-	
+
 	return self;
 }
 
@@ -111,21 +118,21 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(IBAInputManager);
 	id<IBAInputProvider>oldInputProvider = nil;
 	if (activeInputRequestor_ != nil) {
 		oldInputProvider = [self inputProviderForRequestor:activeInputRequestor_];
-		
+
 		if (![activeInputRequestor_ deactivate]) {
 			return NO;
 		}
-		
+
 		oldInputProvider.inputRequestor = nil;
 		[activeInputRequestor_ release];
 	}
-	
+
 	if (inputRequestor != nil)  {
 		activeInputRequestor_ = [inputRequestor retain];
 
 		id<IBAInputProvider>newInputProvider = [self inputProviderForRequestor:activeInputRequestor_];
 		[self displayInputProvider:newInputProvider forInputRequestor:inputRequestor];
-		
+
 		[activeInputRequestor_ activate];
 		newInputProvider.inputRequestor = activeInputRequestor_;
 	} else {
@@ -133,7 +140,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(IBAInputManager);
 		[[activeInputRequestor_ responder] resignFirstResponder];
 		activeInputRequestor_ = nil;
 	}
-	
+
 	return YES;
 }
 
@@ -207,12 +214,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(IBAInputManager);
 	}
 
 	id<IBAInputProvider> provider = [self inputProviderForDataType:inputRequestor.dataType];
-	
+
 	if (provider == nil) {
 		NSString *message = [NSString stringWithFormat:@"No input provider bound to data type %@", inputRequestor.dataType];
 		NSAssert(NO, message);
 	}
-	
+
 	return provider;
 }
 
@@ -228,7 +235,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(IBAInputManager);
 	if (inputProvider.view != nil) {
 		[[requestor responder] setInputView:inputProvider.view];
 	}
-    
+
     [self updateInputNavigationToolbarVisibility];
 }
 
@@ -238,7 +245,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(IBAInputManager);
 
 - (void)setInputNavigationToolbarEnabled:(BOOL)enabled {
 	inputNavigationToolbarEnabled_ = enabled;
-    
+
     [self updateInputNavigationToolbarVisibility];
 }
 
