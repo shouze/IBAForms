@@ -44,6 +44,10 @@ static UIImage *clearImage_ = nil;
 	IBA_RELEASE_SAFELY(cellView_);
 	IBA_RELEASE_SAFELY(label_);
 	IBA_RELEASE_SAFELY(formFieldStyle_);
+    IBA_RELEASE_SAFELY(clearButton_);
+    IBA_RELEASE_SAFELY(validator_);
+    IBA_RELEASE_SAFELY(clearButton_);
+    
 	hiddenCellCache_ = nil;
 	
 	[super dealloc];
