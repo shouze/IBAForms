@@ -157,7 +157,8 @@ static UIImage *clearImage_ = nil;
 }
 
 + (UIImage *)clearImage {
-	if (clearImage_ == nil) {
+	//if (clearImage_ == nil) {
+    UIImage *clearImage = nil;
 		CGFloat size = 19;
 		CGFloat strokeInset = 5;
 		CGFloat lineWidth = 2;
@@ -186,11 +187,11 @@ static UIImage *clearImage_ = nil;
 		[stroke2 closePath];
 		[stroke2 strokeWithBlendMode:kCGBlendModeClear alpha:1.0];
 		
-		clearImage_ = UIGraphicsGetImageFromCurrentImageContext();
+		clearImage = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
-	}
+	//}
 	
-	return clearImage_;
+	return clearImage;
 }
 
 
